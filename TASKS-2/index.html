@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Circular Water Fill Loading Animation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="stopwatch">
+            <svg viewBox="0 0 100 100">
+                <circle id="water" cx="50" cy="50" r="40"></circle>
+            </svg>
+            <div class="time-display" id="stopwatchDisplay">00:00:00</div>
+        </div>
+        <div class="controls">
+            <button id="startBtn">Start</button>
+            <button id="pauseBtn">Pause</button>
+            <button id="resetBtn">Reset</button>
+            <button id="lapBtn">Lap</button>
+        </div>
+        <ul class="lap-times" id="lapList">
+            <!-- Lap times will be dynamically added here -->
+        </ul>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
