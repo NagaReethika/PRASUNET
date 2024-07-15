@@ -1,75 +1,130 @@
-// Get DOM elements
-const stopwatchDisplay = document.getElementById('stopwatchDisplay');
-const startButton = document.getElementById('startBtn');
-const pauseButton = document.getElementById('pauseBtn');
-const resetButton = document.getElementById('resetBtn');
-const lapButton = document.getElementById('lapBtn');
-const lapTimesContainer = document.getElementById('lapList');
-const water = document.getElementById('water');
+const playBtn = document.getElementsByClassName("playbtn")[0];
+const lapBtn = document.getElementsByClassName("lapbtn")[0];
+const resetBtn = document.getElementsByClassName("resetbtn")[0];
+const lapS = document.getElementsByClassName("laps")[0];
+const clearBtn = document.getElementsByClassName("clearbtn")[0];
 
-let startTime;
-let elapsedTime = 0;
-let timerInterval;
-let lapCount = 1;
+const body = document.body; // Get the body element
 
-function startTimer() {
-    startTime = Date.now() - elapsedTime;
-    timerInterval = setInterval(function printTime() {
-        elapsedTime = Date.now() - startTime;
-        displayTime(elapsedTime);
-        // Update water level based on elapsed time
-        updateWaterLevel(elapsedTime);
+const innerCircle = document.getElementsByClassName("inner-circle")[0];
+const sec = document.getElementsByClassName("sec")[0];
+const msec = document.getElementsByClassName("msec")[0];
+const min = document.getElementsByClassName("min")[0];
+const initialColor = { background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%)', color: '#fff' };
+const colors = [
+    { background: 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)', color: '#fff' },
+    { background: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)', color: '#333' },
+    { background: 'linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%)', color: '#333' },
+    { background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)', color: '#333' },
+];
+
+let colorIndex = 0;
+
+function changeBackground() {
+    colorIndex = (colorIndex + 1) % colors.length;
+    body.style.background = colors[colorIndex].background;
+    body.style.color = colors[colorIndex].color;
+}
+
+let secCounter = 0;
+let secs;
+let msecCounter = 0;
+let msecs;
+let minCounter = 0;
+let mins;
+let lapItem = 0; 
+
+const toggleBtn = () => {
+  lapBtn.classList.add("visibility");
+  resetBtn.classList.add("visibility");
+};
+
+const play = () => {
+  toggleBtn();
+  if (playBtn.innerHTML === "Start") {
+    playBtn.innerHTML = "Pause";
+
+    mins = setInterval(() => {
+      min.innerHTML = `${++minCounter}`;
+      if (minCounter < 10) {
+        min.innerHTML = `0${minCounter} :`;
+      }
+    }, 60 * 1000);
+
+    secs = setInterval(() => {
+      if (secCounter === 59) {
+        secCounter = 0;
+      }
+      sec.innerHTML = `${++secCounter}`;
+      if (secCounter < 10) {
+        sec.innerHTML = ` 0${secCounter} :`;
+      }
+    }, 1000);
+
+    msecs = setInterval(() => {
+      if (msecCounter === 99) {
+        msecCounter = 0;
+      }
+      msec.innerHTML = `${++msecCounter}`;
+      if (msecCounter < 10) {
+        msec.innerHTML = ` 0${msecCounter}`;
+      }
     }, 10);
-    startButton.disabled = true;
+  } else {
+    playBtn.innerHTML = "Start";
+    clearInterval(mins);
+    clearInterval(secs);
+    clearInterval(msecs);
+    setTimeout(changeBackground, 1000); // Change background after 1 second
+  }
+  if (playBtn.innerHTML === "Pause") {
+    lapBtn.classList.remove("visibility");
+    resetBtn.classList.remove("visibility");
+  }
+};
+
+const reset = () => {
+  clearInterval(mins);
+  clearInterval(secs);
+  clearInterval(msecs);
+
+  minCounter = 0;
+  secCounter = 0;
+  msecCounter = 0;
+
+  min.innerHTML = "00 :";
+  sec.innerHTML = " 00 :";
+  msec.innerHTML = " 00";
+
+  playBtn.innerHTML = "Start";
+  lapBtn.classList.add("visibility");
+  resetBtn.classList.add("visibility");
+};
+
+const lap = () => {
+  const li = document.createElement("li");
+  const number = document.createElement("span");
+  const timeStamp = document.createElement("span");
+
+  li.setAttribute("class", "lap-item");
+  number.setAttribute("class", "number");
+  timeStamp.setAttribute("class", "time-stamp");
+
+  number.innerHTML = `${++lapItem}`;
+  timeStamp.innerHTML = `${minCounter} : ${secCounter} : ${msecCounter}`;
+  
+  li.append(number, timeStamp);
+  lapS.append(li);
+  clearBtn.classList.remove("laptime")
+};
+
+const clear = () => {
+  lapS.innerHTML = ""
+  lapS.append(clearBtn)
+  clearBtn.classList.add("laptime")
 }
 
-function pauseTimer() {
-    clearInterval(timerInterval);
-    startButton.disabled = false;
-}
-
-function resetTimer() {
-    clearInterval(timerInterval);
-    elapsedTime = 0;
-    displayTime(elapsedTime);
-    resetWaterLevel();
-    lapTimesContainer.innerHTML = '';
-    lapCount = 1;
-    startButton.disabled = false;
-}
-
-function lapTimer() {
-    const lapTime = elapsedTime;
-    const formattedTime = formatTime(lapTime);
-    const lapItem = document.createElement('li');
-    lapItem.textContent = `Lap ${lapCount}: ${formattedTime}`;
-    lapTimesContainer.prepend(lapItem);
-    lapCount++;
-}
-
-function displayTime(time) {
-    const formattedTime = formatTime(time);
-    stopwatchDisplay.textContent = formattedTime;
-}
-
-function formatTime(time) {
-    const minutes = Math.floor(time / (1000 * 60));
-    const seconds = Math.floor((time % (1000 * 60)) / 1000);
-    const milliseconds = Math.floor((time % 1000) / 10);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(2, '0')}`;
-}
-
-function updateWaterLevel(time) {
-    const percentFilled = (time / (60 * 1000)) * 100; // Calculate percentage based on a 1-minute timer
-    water.style.transform = `translateY(${100 - percentFilled}%)`;
-}
-
-function resetWaterLevel() {
-    water.style.transform = `translateY(0%)`;
-}
-
-// Event listeners for buttons
-startButton.addEventListener('click', startTimer);
-pauseButton.addEventListener('click', pauseTimer);
-resetButton.addEventListener('click', resetTimer);
-lapButton.addEventListener('click', lapTimer);
+playBtn.addEventListener("click", play);
+lapBtn.addEventListener("click", lap);
+resetBtn.addEventListener("click", reset);
+clearBtn.addEventListener("click", clear);
