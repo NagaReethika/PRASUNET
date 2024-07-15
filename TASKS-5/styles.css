@@ -1,0 +1,164 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    transition: background-color 0.5s ease;
+}
+
+/* Container for the weather app */
+.weather-app {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 300px;
+}
+
+/* Search form styles */
+.search-form {
+    margin-bottom: 1rem;
+}
+
+.city-input {
+    padding: 0.8rem;
+    font-size: 1rem;
+    width: 60%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.search-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: #4A90E2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn i {
+    font-size: 1.2rem;
+}
+
+.search-btn:hover {
+    background-color: #357ABD;
+}
+
+/* City and date section styles */
+.city-date-section {
+    margin-bottom: 1rem;
+}
+
+.city {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.date {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Temperature info styles */
+.temperature-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.temp {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-right: 0.5rem;
+    color: #333;
+}
+
+.description {
+    display: flex;
+    align-items: center;
+}
+
+.description i {
+    font-size: 2rem;
+    margin-right: 0.5rem;
+    color: #4A90E2;
+}
+
+.description-text {
+    font-size: 1.4rem;
+    color: #666;
+}
+
+/* Additional info section styles */
+.additional-info {
+    display: flex;
+    justify-content: space-around;
+}
+
+.wind-info,
+.humidity-info,
+.visibility-info {
+    text-align: center;
+}
+
+.wind-info i,
+.humidity-info i,
+.visibility-info i {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #4A90E2;
+}
+
+.wind-speed,
+.humidity,
+.visibility-distance {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.wind-label,
+.humidity-label,
+.visibility {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Background color changing animation */
+@keyframes changeBackground {
+    0% {
+        background-color: #F0F0F0; /* Light grey */
+    }
+    25% {
+        background-color: #F8BBD0; /* Pink */
+    }
+    50% {
+        background-color: #B2EBF2; /* Light blue */
+    }
+    75% {
+        background-color: #C5E1A5; /* Light green */
+    }
+    100% {
+        background-color: #F0F0F0; /* Back to light grey */
+    }
+}
+
+body.theme-change {
+    animation: changeBackground 20s infinite;
+}
